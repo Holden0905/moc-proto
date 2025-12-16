@@ -1,33 +1,12 @@
+import { getMocLabel } from "./utils/moc";
+import { safeText } from "./utils/text";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "./supabaseClient";
+import { fetchMocs } from "./api/mocs";
+import { fetchEnvReviewByMoc } from "./api/envReviews";
 
 
-// --- Helpers (handles funky column names like "MOC ID") ---
-function getMocLabel(moc) {
-  if (!moc) return "";
 
-  // Try common possibilities first
-  const candidates = [
-    moc.moc_id, // if you renamed to snake_case
-    moc.mocid,
-    moc.moc_code,
-    moc.moc_number,
-    moc["moc_id"],
-    moc["MOC_ID"],
-    moc["MOC ID"], // if CSV header kept spaces
-  ];
-
-  const found = candidates.find((v) => typeof v === "string" && v.trim().length > 0);
-  if (found) return found;
-
-  // fallback: something stable
-  return moc.id ? String(moc.id).slice(0, 8) : "(unknown MOC)";
-}
-
-function safeText(v) {
-  if (v === null || v === undefined) return "";
-  return String(v);
-}
 
 export default function App() {
   // --- MOCs ---
@@ -64,7 +43,15 @@ export default function App() {
       setLoadingMocs(true);
       setErrorMocs(null);
 
-      const { data, error } = await supabase.from("mocs").select("*");
+      let data = [];
+      let error = null;
+
+      try {
+      data = await fetchMocs();
+      } catch (e) {
+      error = e;
+      }
+
 
       if (ignore) return;
 
@@ -102,11 +89,14 @@ export default function App() {
       setLoadingReviews(true);
       setErrorReviews(null);
 
-      const { data, error } = await supabase
-        .from("env_reviews")
-        .select("*")
-        .eq("moc_id", selectedMoc.id)
-        .order("created_at", { ascending: false });
+      let review = null;
+      let error = null;
+
+      try {
+        review = await fetchEnvReviewByMoc(selectedMoc.id);
+      } catch (e) {
+        error = e;
+      }
 
       if (ignore) return;
 
@@ -115,13 +105,13 @@ export default function App() {
         setEnvReviews([]);
         setSelectedReview(null);
       } else {
-        const rows = data || [];
-        setEnvReviews(rows);
-        setSelectedReview(rows[0] ?? null);
+        setEnvReviews(review ? [review] : []);
+        setSelectedReview(review);
       }
 
-      setLoadingReviews(false);
-    }
+
+        setLoadingReviews(false);
+      }
 
     loadReviewsForMoc();
 
@@ -383,7 +373,6 @@ export default function App() {
     </div>
   );
 }
-
 
 
 
