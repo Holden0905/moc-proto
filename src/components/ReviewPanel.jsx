@@ -160,7 +160,7 @@ export default function ReviewPanel({
   return (
     <div style={{ border: "1px solid #333", borderRadius: 8, padding: 12 }}>
       <h2 style={{ marginTop: 0, fontSize: 18 }}>
-        Review{" "}
+        Air Department Review{" "}
         <span style={{ opacity: 0.7, fontWeight: 400 }}>
           — {selectedMoc ? getMocLabel(selectedMoc) : "(select a MOC)"}
         </span>
