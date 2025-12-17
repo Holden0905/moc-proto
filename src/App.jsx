@@ -1,9 +1,9 @@
-import React, { useState } from "react"; // Added useState
+import React, { useState } from "react";
 import { useMocs } from "./hooks/useMocs";
 import { useEnvReview } from "./hooks/useEnvReview";
 import MOCList from "./components/MocList";
 import ReviewPanel from "./components/ReviewPanel";
-import ImportMOCs from "./components/ImportMOCs"; // Added Import Component
+import ImportMOCs from "./components/ImportMOCs";
 
 export default function App() {
   // State for toggling the import box
@@ -35,23 +35,8 @@ export default function App() {
   return (
     <div style={{ minHeight: "100vh", padding: 20, fontFamily: "system-ui, Arial" }}>
       
-      {/* HEADER AREA WITH BUTTON */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-        <h1 style={{ marginTop: 0, marginBottom: 0 }}>MOC List</h1>
-        <button 
-          onClick={() => setShowImport(!showImport)}
-          style={{ padding: "8px 16px", cursor: "pointer" }}
-        >
-          {showImport ? 'Close Importer' : 'Import Excel File'}
-        </button>
-      </div>
-
-      {/* IMPORT COMPONENT (Only shows when button is clicked) */}
-      {showImport && (
-        <div style={{ marginBottom: 20 }}>
-          <ImportMOCs onUploadSuccess={() => window.location.reload()} />
-        </div>
-      )}
+      {/* HEADER - Just the Title now */}
+      <h1 style={{ marginTop: 0, marginBottom: 20 }}>MOC List</h1>
 
       <div style={{ display: "grid", gridTemplateColumns: "360px 1fr", gap: 16 }}>
         {/* LEFT: MOC List */}
@@ -76,10 +61,23 @@ export default function App() {
         />
       </div>
 
-      <div style={{ marginTop: 18, fontSize: 12, opacity: 0.7 }}>
-        Tip: If your MOC columns have spaces (like “MOC ID”), that’s okay — this file handles it. Later we can normalize
-        column names for sanity.
+      {/* FOOTER AREA - Import Button is now here */}
+      <div style={{ marginTop: 40, paddingTop: 20, borderTop: "1px solid #eee" }}>
+        <button 
+          onClick={() => setShowImport(!showImport)}
+          style={{ padding: "8px 16px", cursor: "pointer", opacity: 0.8 }}
+        >
+          {showImport ? 'Close Importer' : 'Import Excel File'}
+        </button>
+
+        {/* IMPORT COMPONENT (Shows below button when clicked) */}
+        {showImport && (
+          <div style={{ marginTop: 20, maxWidth: "500px" }}>
+            <ImportMOCs onUploadSuccess={() => window.location.reload()} />
+          </div>
+        )}
       </div>
+
     </div>
   );
 }
