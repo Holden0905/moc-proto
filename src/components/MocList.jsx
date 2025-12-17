@@ -4,7 +4,7 @@ import { safeText } from "../utils/text";
 export default function MOCList({ mocs, loading, error, selectedMoc, onSelectMoc }) {
   return (
     <div style={{ border: "1px solid #333", borderRadius: 8, padding: 12 }}>
-      <h2 style={{ marginTop: 0, fontSize: 18 }}>MOCs</h2>
+      <h2 style={{ marginTop: 0, fontSize: 18 }}>MOC List</h2>
 
       {loading && <div>Loading MOCs…</div>}
       {error && (

@@ -35,8 +35,22 @@ export default function App() {
   return (
     <div style={{ minHeight: "100vh", padding: 20, fontFamily: "system-ui, Arial" }}>
       
-      {/* HEADER - Just the Title now */}
-      <h1 style={{ marginTop: 0, marginBottom: 20 }}>MOC List</h1>
+      {/* HEADER SECTION WITH LOGO */}
+      <div style={{ display: "flex", alignItems: "center", marginBottom: 30 }}>
+        <img
+          src="/logo.png" // This looks inside the 'public' folder
+          alt="Stepan Logo"
+          style={{ height: "55px", marginRight: "20px" }}
+        />
+        <div>
+          <h1 style={{ marginTop: 0, marginBottom: 0, lineHeight: "1.1" }}>
+            Stepan Air Department
+          </h1>
+          <h2 style={{ marginTop: 4, marginBottom: 0, fontWeight: "normal", opacity: 0.8, fontSize: "1.4rem", lineHeight: "1.1" }}>
+            MOC Review
+          </h2>
+        </div>
+      </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "360px 1fr", gap: 16 }}>
         {/* LEFT: MOC List */}
