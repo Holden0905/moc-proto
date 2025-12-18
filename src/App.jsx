@@ -1,3 +1,5 @@
+import { Buffer } from 'buffer';
+window.Buffer = Buffer;
 import React, { useState } from "react";
 import { useMocs } from "./hooks/useMocs";
 import { useEnvReview } from "./hooks/useEnvReview";
@@ -5,6 +7,8 @@ import MOCList from "./components/MocList";
 import ReviewPanel from "./components/ReviewPanel";
 import ImportMOCs from "./components/ImportMOCs";
 import MocSummary from "./components/MocSummary"; // <--- 1. NEW IMPORT
+
+// ... leave the rest of the file alone (e.g., import React, import App, etc.)
 
 export default function App() {
   // State for toggling the import box
