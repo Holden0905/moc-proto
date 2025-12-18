@@ -4,6 +4,7 @@ import { useEnvReview } from "./hooks/useEnvReview";
 import MOCList from "./components/MocList";
 import ReviewPanel from "./components/ReviewPanel";
 import ImportMOCs from "./components/ImportMOCs";
+import MocSummary from "./components/MocSummary"; // <--- 1. NEW IMPORT
 
 export default function App() {
   // State for toggling the import box
@@ -33,7 +34,16 @@ export default function App() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", padding: 20, fontFamily: "system-ui, Arial" }}>
+  <div style={{ 
+    border: "1px solid #333", 
+    borderRadius: 8, 
+    padding: 12,
+    background: "#111",
+    color: "#eee",
+    // CHANGED:
+    height: "100%",        // Forces it to fill the height provided by the parent
+    boxSizing: "border-box" // Ensures padding doesn't mess up the height
+  }}>
       
       {/* HEADER SECTION WITH LOGO */}
       <div style={{ display: "flex", alignItems: "center", marginBottom: 30 }}>
@@ -53,7 +63,7 @@ export default function App() {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "360px 1fr", gap: 16 }}>
-        {/* LEFT: MOC List */}
+        {/* LEFT COLUMN: MOC List */}
         <MOCList
           mocs={mocs}
           loading={loadingMocs}
@@ -62,17 +72,32 @@ export default function App() {
           onSelectMoc={setSelectedMoc}
         />
 
-        {/* RIGHT: Review Panel */}
-        <ReviewPanel
-          selectedMoc={selectedMoc}
-          selectedReview={selectedReview}
-          startOrContinueReview={startOrContinueReview}
-          loadingReviews={loadingReviews}
-          creatingReview={creatingReview}
-          createError={createError}
-          errorReviews={errorReviews}
-          onReviewUpdated={handleReviewUpdate}
-        />
+        {/* RIGHT COLUMN: Container for Summary + Review */}
+        {/* 2. New Flex Container to hold Summary and Panel side-by-side */}
+        <div style={{ display: "flex", gap: 16, alignItems: "stretch" }}>
+          
+          {/* MOC Summary - Only show if a MOC is selected */}
+          {selectedMoc && (
+            <div style={{ flex: "0 0 400px" }}> {/* Fixed width of 400px */}
+              <MocSummary moc={selectedMoc} />
+            </div>
+          )}
+
+          {/* Review Panel - Takes remaining width */}
+          <div style={{ flex: 1 }}>
+            <ReviewPanel
+              selectedMoc={selectedMoc}
+              selectedReview={selectedReview}
+              startOrContinueReview={startOrContinueReview}
+              loadingReviews={loadingReviews}
+              creatingReview={creatingReview}
+              createError={createError}
+              errorReviews={errorReviews}
+              onReviewUpdated={handleReviewUpdate}
+            />
+          </div>
+
+        </div>
       </div>
 
       {/* FOOTER AREA - Import Button is now here */}
