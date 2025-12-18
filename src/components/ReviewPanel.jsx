@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { supabase } from "../supabaseClient";
 import { getMocLabel } from "../utils/moc";
 import { safeText } from "../utils/text";
-import { PDFDownloadLink } from '@react-pdf/renderer';
-import ReviewPdfDocument from './ReviewPdfDocument';
+import { PDFDownloadLink } from '@react-pdf/renderer'; // <--- NEW IMPORT
+import ReviewPdfDocument from './ReviewPdfDocument';  // <--- NEW IMPORT
 
 export default function ReviewPanel({
   selectedMoc,
@@ -312,40 +312,50 @@ export default function ReviewPanel({
             />
           </label>
 
-          {/* Save Button */}
+          {/* Save & PDF Button Container */}
           <div style={{ display: "flex", gap: 10, alignItems: "center", marginTop: 10 }}>
             <button
               onClick={handleSaveReview}
               disabled={savingReview}
-              style={{ padding: "10px 20px", borderRadius: 8, border: "1px solid #444", background: "#222", color: "#fff", cursor: "pointer", fontWeight: "bold" }}
+              style={{ 
+                padding: "10px 20px", 
+                borderRadius: 8, 
+                border: "1px solid #444", 
+                background: "#222", 
+                color: "#fff", 
+                cursor: "pointer", 
+                fontWeight: "bold" 
+              }}
             >
               {savingReview ? "Saving…" : "Save Changes"}
             </button>
-            {saveError && <span style={{ color: "salmon" }}><b>Error:</b> {saveError}</span>}
-          </div>
 
-          {/* PDF Download Button */}
+            {/* NEW PDF BUTTON */}
             {selectedReview && selectedMoc && (
-            <div style={{ marginTop: 20 }}>
-                <PDFDownloadLink
+              <PDFDownloadLink
                 document={<ReviewPdfDocument moc={selectedMoc} review={selectedReview} />}
                 fileName={`Review_${selectedMoc["MOC ID"] || "Draft"}.pdf`}
                 style={{
-                    textDecoration: "none",
-                    padding: "10px 15px",
-                    color: "#fff",
-                    backgroundColor: "#2563eb", // Blue color
-                    borderRadius: "6px",
-                    fontSize: "13px",
-                    fontWeight: "bold"
+                  textDecoration: "none",
+                  padding: "10px 15px",
+                  color: "#fff",
+                  backgroundColor: "#2563eb", 
+                  borderRadius: "8px", 
+                  border: "1px solid #1d4ed8",
+                  fontSize: "13px",
+                  fontWeight: "bold",
+                  display: "flex",
+                  alignItems: "center"
                 }}
-                >
-                {({ blob, url, loading, error }) =>
-                    loading ? 'Generating PDF...' : 'Download PDF Report'
+              >
+                {({ loading }) =>
+                  loading ? 'Loading...' : 'Download PDF Report'
                 }
-    </PDFDownloadLink>
-  </div>
-)}
+              </PDFDownloadLink>
+            )}
+
+            {saveError && <span style={{ color: "salmon" }}><b>Error:</b> {saveError}</span>}
+          </div>
 
         </div>
       )}
