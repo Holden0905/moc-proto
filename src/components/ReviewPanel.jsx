@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { supabase } from "../supabaseClient";
 import { getMocLabel } from "../utils/moc";
 import { safeText } from "../utils/text";
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import ReviewPdfDocument from './ReviewPdfDocument';
 
 export default function ReviewPanel({
   selectedMoc,
@@ -321,6 +323,29 @@ export default function ReviewPanel({
             </button>
             {saveError && <span style={{ color: "salmon" }}><b>Error:</b> {saveError}</span>}
           </div>
+
+          {/* PDF Download Button */}
+            {selectedReview && selectedMoc && (
+            <div style={{ marginTop: 20 }}>
+                <PDFDownloadLink
+                document={<ReviewPdfDocument moc={selectedMoc} review={selectedReview} />}
+                fileName={`Review_${selectedMoc["MOC ID"] || "Draft"}.pdf`}
+                style={{
+                    textDecoration: "none",
+                    padding: "10px 15px",
+                    color: "#fff",
+                    backgroundColor: "#2563eb", // Blue color
+                    borderRadius: "6px",
+                    fontSize: "13px",
+                    fontWeight: "bold"
+                }}
+                >
+                {({ blob, url, loading, error }) =>
+                    loading ? 'Generating PDF...' : 'Download PDF Report'
+                }
+    </PDFDownloadLink>
+  </div>
+)}
 
         </div>
       )}
